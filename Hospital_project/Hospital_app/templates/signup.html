@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title> Login </title>
+	{% load staticfiles %}
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<!---------------<link rel="stylesheet" type="text/css" href=  "{% static 'newlogin.css' %}">
+	<link href="https://fonts.googleapis.com/css?family=Play&display=swap" rel="stylesheet">-------------->
+<script>
+function wrong()
+{
+alert("invalid data");
+}
+</script>
+</head>
+<body>
+{% if is_alert %}
+<script type = "text/javascript">
+wrong()
+</script>
+{% endif %}
+{% load staticfiles %}
+<link rel = "stylesheet" type="text/css" href = "{% static 'style.css' %}">
+
+<div id = "menu">
+<font size = "5">
+<ul>
+<li><a href ="{% url 'Hospital_app:signup' %}"  target = "_parent">Home</a></li>
+<li><a href="{% url 'Hospital_app:signup' %}"  target = "_parent">Register</a></li>
+<li><a href="{% url 'Hospital_app:signup' %}"  target = "_parent">Login</a></li>
+<li><a href="{% url 'Hospital_app:signup' %}"  target = "_parent">Logout</a></li>
+
+</ul>
+</div>
+</body>
+</html>
+<!----------------------------------------------------------------->
+       <div class="signin">
+		   <div id = "image">
+	{% load static %}
+	<img src = "{% static 'images/sign_in_as_doctor.jpg' %}" align = "right" id = "doc" onclick="changescreen(1)">
+			   <img src = "{% static 'images/sign_in_as_patient.jpg' %}" align = "right" id = "pat" onclick="changescreen(0)" >
+
+</div>
+       	<form  action = "{% url 'Hospital_app:signup' %}"  method = post> {% csrf_token %}
+
+
+       		<h2 style="color:white">Sign up</h2>
+       		{{ form.as_p }}
+			<br>
+			<input type="submit" value="sign up"><br><br>
+
+
+
+       	</form>
+       </div>
+
+</body>
+<script type="text/javascript">
+function changescreen(value)
+{
+window.location = "?q="+value
+}
+</script>
+</html>
