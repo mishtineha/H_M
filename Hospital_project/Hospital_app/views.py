@@ -170,20 +170,26 @@ class Profile_patient(View):
     def get(self,request):
         if request.user.is_authenticated:
             is_doc=False
+            is_recep = False
+            is_pat = False
+            is_hr = False
             p = Patient.objects.filter(user = request.user)
             d = Doctor.objects.filter(user = request.user)
             h = Hr.objects.filter(user = request.user)
             r = Receptionist.objects.filter(user = request.user)
             if len(p) == 1:
                 data = p
+                is_pat = True
             elif len(d) == 1:
                 is_doc = True
                 data = d
             elif len(h) == 1:
                 data = h
+                is_hr = True
             elif len(r) == 1:
                 data = r
-            context = {'data':data[0],'is_doc':is_doc}
+                is_recep = True
+            context = {'data':data[0],'is_doc':is_doc,'is_recep':is_recep,'is_pat':is_pat,'is_hr':is_hr}
             template = loader.get_template('get_profile.html')
             return HttpResponse(template.render(context,request))
         else:
@@ -191,19 +197,25 @@ class Profile_patient(View):
 
     def post(self,request):
         is_doc = False
+        is_recep = False
+        is_pat = False
+        is_hr = False
         p = Patient.objects.filter(user=request.user)
         d = Doctor.objects.filter(user=request.user)
         h = Hr.objects.filter(user=request.user)
         r = Receptionist.objects.filter(user=request.user)
         if len(p) == 1:
             data = p
+            is_pat = True
         elif len(d) == 1:
             is_doc = True
             data = d
         elif len(h) == 1:
             data = h
+            is_hr = True
         elif len(r) == 1:
             data = r
+            is_recep = True
         data = data[0]
         if is_doc:
             form = Signin_doctor(request.POST)
@@ -219,7 +231,7 @@ class Profile_patient(View):
                 data.specialization = request.POST['specialization']
             data.save()
         else:
-            context = {'data': data, 'is_doc': is_doc}
+            context = {'data': data, 'is_doc': is_doc,'is_recep':is_recep,'is_pat':is_pat,'is_hr':is_hr}
             template = loader.get_template('get_profile.html')
             return HttpResponse("INVALID DATA " + template.render(context, request))
         return HttpResponseRedirect("../profile/")
@@ -239,11 +251,15 @@ class Doctor_view(View):
 
 class Hr_view(View):
     def get(self,request):
-        return HttpResponse("hello HR")
+        return HttpResponse("hello Hr")
 
 class Recep_view(View):
     def get(self,request):
-        return HttpResponse("hello Reception")
+        context = {'nothing': "nothing"}
+        template = loader.get_template('recep_home.html')
+        return HttpResponse(template.render(context, request))
+
+
 
 class Doctor_appointment(View):
     def get(self,request):

@@ -16,11 +16,20 @@
 <div id = "menu">
 <font size = "5">
 <ul>
-<li><a href ="{% url 'Hospital_app:doctor' %}">home</a></li>
+
+    {% if is_recep %}
+    <li><a href ="{% url 'Hospital_app:receptionist' %}">home</a></li>
+    <li><a href ="{% url 'Hospital_app:app_doctor' %}">manage&nbsp;&nbsp;appointments</a></li>
+    {% endif %}
     {% if is_doc %}
+    <li>
+    <a href ="{% url 'Hospital_app:doctor' %}">home</a></li>
     <li><a href ="{% url 'Hospital_app:app_doctor' %}">appointments</a></li>
     <li><a href ="{% url 'Hospital_app:pres' %}">prescription</a></li>
-    {% else %}
+    {% endif %}
+    {% if is_pat %}
+    <li>
+    <a href ="{% url 'Hospital_app:patient_home' %}">home</a></li>
     <li><a href ="{% url 'Hospital_app:patient_appointment' %}">your appointments</a></li>
     <li><a href ="{% url 'Hospital_app:payment' %}">invoice and payment</a></li>
     {% endif %}
