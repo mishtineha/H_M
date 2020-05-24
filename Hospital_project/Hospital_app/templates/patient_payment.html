@@ -11,7 +11,7 @@
 </head>
 <body>
 {% load staticfiles %}
-<link rel = "stylesheet" type="text/css" href = "{% static 'style.css' %}">
+<link rel = "stylesheet" type="text/css" href = "{% static 'header.css' %}">
 
 <div id = "menu">
 <font size = "5">
@@ -24,4 +24,18 @@
 
 </ul>
 </div>
-<img src = "{% static 'images/Home.jpg' %}" align = "center" id = "home_image">
+<div style = "margin-top:100px;">
+    <table width="70%" align="center" border = "1">
+        <tr bgcolor="#3498db">
+            <td>Invoice</td>
+            <td>Amount_paid</td>
+            <td>Total_amount</td>
+        </tr>
+    {% for pay in payment %}
+        <tr>
+            <td><a href = "http://127.0.0.1:8000/getbill/{{ pay.id}}"> invoice </a></td>
+            <td>{{ pay.amount_paid }}</td>
+            <td>{{ pay.total_amount }}</td>
+    {% endfor %}
+    </table>
+</div>

@@ -5,7 +5,7 @@ from django.contrib.auth import login,authenticate,logout
 from django.shortcuts import render,render_to_response
 from django.http import HttpResponse
 from django .template import loader
-from Hospital_app.models import Doctor,Patient,Appointments
+from Hospital_app.models import Doctor,Patient,Appointments,Payment
 from django.contrib.auth.models import User
 
 class Signin(View):
@@ -119,9 +119,22 @@ class Patient_appointment(View):
         else:
             return HttpResponse("LOGIN FIRST")
 
+class Patient_invoice(View):
+    def get(self,request):
+        if request.user.is_active:
+            p = Patient.objects.filter(user=request.user)
+            pay = Payment.objects.filter(patient = p[0])
+            context = {'payment':pay}
+            template = loader.get_template('patient_payment.html')
+            return HttpResponse(template.render(context, request))
+        else:
+            return HttpResponse("LOGIN FIRST")
 
-
-
+def Getbill(request,parameter):
+    pay = Payment.objects.get(id = parameter)
+    context = {"url":pay.invoice}
+    template = loader.get_template("display_bill.html")
+    return HttpResponse(template.render(context,request))
 
 
 
