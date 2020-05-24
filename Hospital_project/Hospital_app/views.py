@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from Hospital_app.forms import Signin_doctor,Signin_patient
+from Hospital_app.forms import Signin_doctor,Signin_patient,Login
 from django.views.generic.base import View,HttpResponseRedirect
-from django.contrib.auth import login
+from django.contrib.auth import login,authenticate
 from django.shortcuts import render,render_to_response
 from django.http import HttpResponse
 from django .template import loader
@@ -41,8 +41,8 @@ class Signin(View):
             except:
                 context = {'form': form, 'is_alert': True}
                 template = loader.get_template('signup.html')
-                return HttpResponse("username ALREADY EXIST!!!!!!<br><br>" + template.render(context, request))
-            user = User.objects.get(username = request.POST['Email'])
+                return HttpResponse("USERNAME ALREADY EXIST!!!!!!<br><br>" + template.render(context, request))
+            user = User.objects.get(username = request.POST['username'])
             login(request,user)
             if is_doc:
                 doc = Doctor(user = user,Name = request.POST['Name'],Email = request.POST['Email'],
@@ -59,6 +59,37 @@ class Signin(View):
             context = {'form': form, 'is_alert': True}
             template = loader.get_template('signup.html')
             return HttpResponse(template.render(context, request))
+
+class Home(View):
+    def get(self,request):
+        context = {'nothing':'nothing'}
+        template = loader.get_template('Home.html')
+        return HttpResponse(template.render(context, request))
+
+class Login_view(View):
+    def get(self,request):
+        form = Login
+        context = {'form':form,'is_alert':False}
+        template = loader.get_template('login.html')
+        return HttpResponse(template.render(context, request))
+    def post(self,request):
+        form = Login(request.POST)
+        if form.is_valid:
+                user = User.objects.filter(username=str(request.POST['username']),password=str(request.POST['password']))
+                if len(user) == 1:
+                    login(request,user[0])
+                    return HttpResponse("Login succesfully")
+                else:
+                    context = {'form': form,'is_alert':True}
+                    template = loader.get_template('login.html')
+                    return HttpResponse("<b>username or password does not matcj</b><br>" + template.render(context, request))
+        else:
+            context = {'form': form,'is_alert':True}
+            template = loader.get_template('login.html')
+            return HttpResponse("<b>username or password does not match in else</b>" + template.render(context, request))
+
+
+
 
 
 

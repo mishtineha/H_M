@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title> Login </title>
+	{% load staticfiles %}
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href=  "{% static 'new__login.css' %}">
+	<link href="https://fonts.googleapis.com/css?family=Play&display=swap" rel="stylesheet">
+</head>
+<body>
+
+{% load staticfiles %}
+<!--<link rel = "stylesheet" type="text/css" href = "{% static 'style.css' %}">------->
+<script>
+function wrong()
+{
+alert("invalid data");
+}
+</script>
+{% if is_alert %}
+<script type = "text/javascript">
+wrong()
+</script>
+{% endif %}
+
+<div id = "menu">
+<font size = "5">
+<ul>
+<li><a href ="{% url 'Hospital_app:Home' %}"  >Home</a></li>
+<li><a href="http://127.0.0.1:8000/?q=0">Register</a></li>
+<li><a href="{% url 'Hospital_app:Login' %}">Login</a></li>
+<li><a href="{% url 'Hospital_app:signup' %}"  target = "_parent">Logout</a></li>
+
+</ul>
+</div>
+<div class="login">
+       	<form  action = "{% url 'Hospital_app:Login' %}"  method = post> {% csrf_token %}
+
+       		{{ form.as_p }}
+			<br>
+			<input type="submit" value="Login"><br><br>
+
+
+
+       	</form>
+       </div>

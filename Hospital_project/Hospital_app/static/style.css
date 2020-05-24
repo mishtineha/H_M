@@ -51,11 +51,7 @@ ul {
  border-right:1px solid white;
     
 }
-p.excerpt{
 
-border: 2px solid #0066FF;
-
-}
 #menu ul li:last-child{
     border-right:none;
     
@@ -74,17 +70,12 @@ border: 2px solid #0066FF;
     font-weight:bold;
     color:#efa61e;
 }
-input{
-	width: 440px;
-	text-align: left;
-	background: transparent;
-    font-family: 'play',sans-serif;
-    font-size: 8px;
-    font-weight: 200px;
-    padding: 10px 0;
-    transition: border 0.5s;
-    outline: none;
-    color: #fff;
+input
+{
+color:black;
+width:411px;
+height:50px;
+font-size:25px;
 }
 form
 {
@@ -101,7 +92,7 @@ padding: 10px 0;
 }
 #doc
 {
-width:30%;
+width:32%;
 height:600px;
 padding: 10px 0;
 }
@@ -112,12 +103,18 @@ height:600px;
 }
 #pat
 {
-width:35%;
+width:37%;
 height:600px;
 }
 #pat:hover
 {
 width:40%;
 height:600px;
+}
+
+#home_image
+{
+width:1620px;
+height:200%;
 }
 

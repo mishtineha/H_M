@@ -1,0 +1,120 @@
+body{
+	font-family: Tahoma, Geneva ,sans-serif;
+	color: #fff;
+	background: url('images/home.jpg');
+	background-size: cover;
+}
+#menu {
+     height: 70px;
+     width: 100%;
+    background:rgba( 43, 43, 32,0.9);
+    padding:6px 0;
+    border-radius: 20px;
+
+}
+ul {
+    list-style: none;
+    padding:0 45px;
+    margin-left: 0px;
+}
+
+#menu ul li{
+
+   float:left;
+    padding:0 45px;
+    height:30px;
+ border-right:1px solid white;
+
+}
+
+#menu ul li:last-child{
+    border-right:none;
+
+}
+#menu ul li a{
+        text-decoration: none;
+        text-transform: uppercase;
+        font-size:25px;
+        color:#f9faf9;
+    line-height: 30px;
+    transition: font-size 0.4s ease;
+}
+#menu ul li a:hover,#menu ul li a.active
+{
+    font-size: 30px;
+    font-weight:bold;
+    color:#efa61e;
+}
+
+.login
+{   
+	background: rgba(44,62,80,0.5);
+	padding : 40px;
+	width: 300px;
+	margin-top: 150px;
+	height: 500px;
+	margin-left: 600px;
+	margin-right:600px;
+	border-radius: 25px;
+
+}
+
+form{
+	width: 250px;
+	text-align: center;
+}
+
+input{
+	width: 240px;
+	text-align: center;
+	background: transparent;
+	border: none;
+    border-bottom: 1px solid #fff;
+    font-family: 'play',sans-serif;
+    font-size: 16px;
+    font-weight: 200px;
+    padding: 10px 0;
+    transition: border 0.5s;
+    outline: none;
+    color: #fff;
+}
+
+input[type=button]
+{
+	border: none;
+    width: 190px;
+    background: white;
+    color: #000;
+    font-size: 16px;
+    line-height: 25px;
+    padding: 10px 0;
+    border-radius: 15px;
+    cursor: pointer;
+
+} 
+input[type=button]:hover{
+	color: #fff;
+	background-color: black;
+
+}
+h2{
+	color: white;
+}
+a{
+	color: yellow;
+	text-decoration: blink;
+}
+a:hover{
+	color: skyblue;
+}
+.container{
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+	margin-left: 20px;
+}
+
+::placeholder{
+	color: aliceblue;
+	opacity: 0.8;
+}
