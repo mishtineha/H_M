@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title> Login </title>
+	{% load staticfiles %}
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<!---------------<link rel="stylesheet" type="text/css" href=  "{% static 'newlogin.css' %}">
+	<link href="https://fonts.googleapis.com/css?family=Play&display=swap" rel="stylesheet">-------------->
+</head>
+<body>
+{% load staticfiles %}
+<link rel = "stylesheet" type="text/css" href = "{% static 'style.css' %}">
+
+<div id = "menu">
+<font size = "5">
+<ul>
+<li><a href ="{% url 'Hospital_app:doctor' %}">home</a></li>
+    <li><a href ="{% url 'Hospital_app:app_doctor' %}">appointments</a></li>
+    <li><a href ="{% url 'Hospital_app:pres' %}">prescription</a></li>
+    <li><a href ="{% url 'Hospital_app:patient_profile' %}">profile</a></li>
+<li><a href="{% url 'Hospital_app:logout' %}">logout</a></li>
+
+</ul>
+</div>
+<img src = "{% static 'images/Home.jpg' %}" align = "center" id = "home_image">

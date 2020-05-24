@@ -16,9 +16,14 @@
 <div id = "menu">
 <font size = "5">
 <ul>
-<li><a href ="{% url 'Hospital_app:patient_home' %}">home</a></li>
+<li><a href ="{% url 'Hospital_app:doctor' %}">home</a></li>
+    {% if is_doc %}
+    <li><a href ="{% url 'Hospital_app:app_doctor' %}">appointments</a></li>
+    <li><a href ="{% url 'Hospital_app:pres' %}">prescription</a></li>
+    {% else %}
     <li><a href ="{% url 'Hospital_app:patient_appointment' %}">your appointments</a></li>
     <li><a href ="{% url 'Hospital_app:payment' %}">invoice and payment</a></li>
+    {% endif %}
     <li><a href ="{% url 'Hospital_app:patient_profile' %}">profile</a></li>
 <li><a href="{% url 'Hospital_app:logout' %}">logout</a></li>
 
@@ -26,19 +31,19 @@
 </div>
 
 <p>
-<form action = "{% url 'Hospital_app:patient_profile' %}" method = "post">
+<form action = "{% url 'Hospital_app:patient_profile' %}" method = "post" name="myForm" onsubmit = "return(validate());">
 {% csrf_token %}
     <p>
- Name:<input type = "text" value = {{data.Name}} NAME="Name">
+ Name:<input type = "text" value = {{data.Name}} name="Name">
 </p>
 <p>
-    Email:<input type = "text" value = {{data.Email}} name="Email">
+    Email:<input type = "email" value = {{data.Email}} name="Email">
 </p>
 <p>
  Gender:<input type = "text" value = {{data.gender}} name="gender">
 </p>
 <p>
- Phone_no:<input type = "text" value = {{data.phone_no}} name="phone_no">
+ Phone_no:<input type = "number" value = {{data.phone_no}} name="phone_no">
 </p>
 {% if is_doc %}
 <p>
@@ -52,3 +57,41 @@
 
 </form>
 </p>
+<script type = "text/javascript">
+
+    function validate() {
+
+         if( document.myForm.Name.value == "" ) {
+            alert( "Please provide your name!" );
+            document.myForm.Name.focus() ;
+            return false;
+         }
+         if( document.myForm.EMail.value == "" ) {
+            alert( "Please provide your Email!" );
+            document.myForm.EMail.focus() ;
+            return false;
+         }
+         if( document.myForm.gender.value == "" ) {
+            alert( "Please provide your gender" );
+            document.myForm.gender.focus() ;
+            return false;
+         }
+          if( document.myForm.phone_no.value == "" ) {
+            alert( "Please provide your phone number!" );
+            document.myForm.phone_no.focus() ;
+            return false;
+
+         }
+          if( document.myForm.degree.value == "" ) {
+            alert( "Please provide your Degree!" );
+            document.myForm.degree.focus() ;
+            return false;
+         }
+          if( document.myForm.specialization.value == "" ) {
+            alert( "Please provide your specialization!" );
+            document.myForm.specialization.focus() ;
+            return false;
+         }
+         return( true );
+         }
+</script>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title> Login </title>
+	{% load staticfiles %}
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<!---------------<link rel="stylesheet" type="text/css" href=  "{% static 'newlogin.css' %}">
+	<link href="https://fonts.googleapis.com/css?family=Play&display=swap" rel="stylesheet">-------------->
+<style>
+input[type=submit]
+{
+color:blue;
+width:100px;
+font-size:20px;
+font-family: sans-serif;
+padding: 10px 0;
+    transition: border 0.5s;
+}
+</style>
+</head>
+<body>
+{% load staticfiles %}
+<link rel = "stylesheet" type="text/css" href = "{% static 'header.css' %}">
+
+<div id = "menu">
+<font size = "5">
+<ul>
+<li><a href ="{% url 'Hospital_app:doctor' %}">home</a></li>
+    <li><a href ="{% url 'Hospital_app:app_doctor' %}">appointments</a></li>
+    <li><a href ="{% url 'Hospital_app:pres' %}">prescription</a></li>
+    <li><a href ="{% url 'Hospital_app:patient_profile' %}">profile</a></li>
+<li><a href="{% url 'Hospital_app:logout' %}">logout</a></li>
+
+</ul>
+</div>
+
+    <div id = "all_details" style="position: absolute;top:25%;border:solid 1px;width:550px;text-align:center;">
+
+        {% for prescription in pres %}
+        <p style = "background-color:blue;color:white;"> Patient:{{ prescription.patient.user.username}}</p>
+        <P style = "color: grey;">Symptoms:{{ prescription.symptoms }}<br>
+        medicines:{{ prescription.medicines }}<br>
+        Dosage:{{ prescription.Dosage }}
+        Duration:{{ prescription.Duration }}</P>
+
+        {% endfor %}
+    </div>
+<div id = "update_pres" style="position: absolute;left:50%;top:25%;width:550px;">
+    <p style = "background-color:blue;color:white;">Add Prescription</p>
+    <form action = "{% url 'Hospital_app:pres' %}" method = "post" name="myForm" onsubmit = "return(validate());">
+        {% csrf_token %}
+        Patient:<select style="width:220px;height:30px;font-size:20px;text-align:center;" name ="username">
+        {% for pa in pat %}
+        <option value = "{{ pa.user.username }}">{{ pa.user.username }}</option>
+    </select>
+        {% endfor %}
+        <br><br>
+        Symptoms:<input style="width:220px;height:30px;font-size:20px;" name="symptoms"><br><br>
+        Dosage:<input style="width:220px;height:30px;font-size:20px;" name="dosage"><br><br>
+        medicines:<input style="width:220px;height:30px;font-size:20px;" name="medicines"><br><br>
+        Duration:<input style="width:220px;height:30px;font-size:20px;" name="duration"><br><br>
+        <input type = "submit" value = "add">
+    </form>
+</div>
+<script type = "text/javascript">
+
+    function validate() {
+
+         if( document.myForm.symptoms.value == "" ) {
+            alert( "Please provide symptoms!" );
+            document.myForm.symptoms.focus() ;
+            return false;
+         }
+         if( document.myForm.dosage.value == "" ) {
+            alert( "Please provide dosage!" );
+            document.myForm.dosage.focus() ;
+            return false;
+         }
+         if( document.myForm.medicines.value == "" ) {
+            alert( "Please provide medicines" );
+            document.myForm.medicines.focus() ;
+            return false;
+         }
+          if( document.myForm.duration.value == "" ) {
+            alert( "Please provide duration!" );
+            document.myForm.duration.focus() ;
+            return false;
+
+         }
+         return( true );
+         }
+</script>

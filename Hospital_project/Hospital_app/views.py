@@ -5,9 +5,9 @@ from django.contrib.auth import login,authenticate,logout
 from django.shortcuts import render,render_to_response
 from django.http import HttpResponse
 from django .template import loader
-from Hospital_app.models import Doctor,Patient,Appointments,Payment,Hr,Receptionist
+from Hospital_app.models import Doctor,Patient,Appointments,Payment,Hr,Receptionist,Prescription
 from django.contrib.auth.models import User
-
+from django.core.exceptions import ObjectDoesNotExist
 class Signin(View):
     def get(self,request):
         option = request.GET['q']
@@ -49,12 +49,12 @@ class Signin(View):
                              gender= request.POST['gender'],phone_no = request.POST['phone_no'],
                              Degree=request.POST['Degree'],specialization=request.POST['specialization'])
                 doc.save()
+                return HttpResponseRedirect('../doctor/')
             else:
                 pat = Patient(user = user,Name = request.POST['Name'],Email = request.POST['Email'],
                              gender= request.POST['gender'],phone_no = request.POST['phone_no'])
                 pat.save()
-
-            return HttpResponseRedirect('../patient/')
+                return HttpResponseRedirect('../patient/')
         else:
             context = {'form': form, 'is_alert': True}
             template = loader.get_template('signup.html')
@@ -78,7 +78,18 @@ class Login_view(View):
                 user = User.objects.filter(username=str(request.POST['username']),password=str(request.POST['password']))
                 if len(user) == 1:
                     login(request,user[0])
-                    return HttpResponseRedirect('../patient/')
+                    p = Patient.objects.filter(user=request.user)
+                    d = Doctor.objects.filter(user=request.user)
+                    h = Hr.objects.filter(user=request.user)
+                    r = Receptionist.objects.filter(user=request.user)
+                    if len(p) == 1:
+                        return HttpResponseRedirect('../patient/')
+                    elif len(d) == 1:
+                        return HttpResponseRedirect('../doctor/')
+                    elif len(h) == 1:
+                        return HttpResponseRedirect('../hr/')
+                    elif len(r) == 1:
+                        return HttpResponseRedirect('../receptionist/')
                 else:
                     context = {'form': form,'is_alert':True}
                     template = loader.get_template('login.html')
@@ -93,6 +104,10 @@ class Login_view(View):
 class Patient_home(View):
     def get(self,request):
         if request.user.is_authenticated:
+            try:
+                request.user.patient
+            except ObjectDoesNotExist:
+                return HttpResponse("LOGIN FIRST")
 
             context = {"nothing":"nothing"}
             template = loader.get_template('patient_home.html')
@@ -106,11 +121,15 @@ class Logout(View):
             logout(request)
             return HttpResponseRedirect("../home/")
         else:
-            return HttpResponse("LOGIN FIRST")
+            return HttpResponseRedirect("../home/")
 
 class Patient_appointment(View):
     def get(self,request):
         if request.user.is_active:
+            try:
+                request.user.patient
+            except ObjectDoesNotExist:
+                return HttpResponse("LOGIN FIRST")
             p = Patient.objects.filter(user=request.user)
             appointments = Appointments.objects.filter(patient=p[0])
             context = {'app':appointments}
@@ -122,6 +141,10 @@ class Patient_appointment(View):
 class Patient_invoice(View):
     def get(self,request):
         if request.user.is_active:
+            try:
+                request.user.patient
+            except ObjectDoesNotExist:
+                return HttpResponse("LOGIN FIRST")
             p = Patient.objects.filter(user=request.user)
             pay = Payment.objects.filter(patient = p[0])
             context = {'payment':pay}
@@ -132,6 +155,10 @@ class Patient_invoice(View):
 
 def Getbill(request,parameter):
     if request.user.is_authenticated:
+        try:
+            request.user.patient
+        except ObjectDoesNotExist:
+            return HttpResponse("LOGIN FIRST")
         pay = Payment.objects.get(id = parameter)
         context = {"url":pay.invoice}
         template = loader.get_template("display_bill.html")
@@ -178,15 +205,83 @@ class Profile_patient(View):
         elif len(r) == 1:
             data = r
         data = data[0]
-        data.Name = request.POST['Name']
-        data.Email = request.POST['Email']
-        data.gender = request.POST['gender']
-        data.phone_no = request.POST['phone_no']
         if is_doc:
-            data.Degree = request.POST['degree']
-            data.specialization = request.POST['specialization']
-        data.save()
+            form = Signin_doctor(request.POST)
+        else:
+            form = Signin_patient(request.POST)
+        if form.is_valid:
+            data.Name = request.POST['Name']
+            data.Email = request.POST['Email']
+            data.gender = request.POST['gender']
+            data.phone_no = request.POST['phone_no']
+            if is_doc:
+                data.Degree = request.POST['degree']
+                data.specialization = request.POST['specialization']
+            data.save()
+        else:
+            context = {'data': data, 'is_doc': is_doc}
+            template = loader.get_template('get_profile.html')
+            return HttpResponse("INVALID DATA " + template.render(context, request))
         return HttpResponseRedirect("../profile/")
+
+class Doctor_view(View):
+    def get(self,request):
+        if request.user.is_authenticated:
+            try:
+                request.user.doctor
+            except ObjectDoesNotExist:
+                return HttpResponse("LOGIN FIRST")
+            context = {'nothing':'nothing'}
+            template = loader.get_template("doctor_home.html")
+            return HttpResponse(template.render(context,request))
+        else:
+            return HttpResponse("LOGIN FIRST")
+
+class Hr_view(View):
+    def get(self,request):
+        return HttpResponse("hello HR")
+
+class Recep_view(View):
+    def get(self,request):
+        return HttpResponse("hello Reception")
+
+class Doctor_appointment(View):
+    def get(self,request):
+        if request.user.is_active:
+            try:
+                request.user.doctor
+            except ObjectDoesNotExist:
+                return HttpResponse("LOGIN FIRST")
+            d = Doctor.objects.filter(user=request.user)
+            appointments = Appointments.objects.filter(doctor=d[0])
+            context = {'app':appointments}
+            template = loader.get_template('doctor_appointment.html')
+            return HttpResponse(template.render(context,request))
+        else:
+            return HttpResponse("LOGIN FIRST")
+
+class prescribe(View):
+    def get(self,request):
+        if request.user.is_active:
+            try:
+                request.user.doctor
+            except ObjectDoesNotExist:
+                return HttpResponse("LOGIN FIRST")
+            pres = Prescription.objects.filter(Doc = request.user.doctor)
+            pat = Patient.objects.all()
+            context = {'pres':pres,'pat':pat}
+            template = loader.get_template("prescription.html")
+            return HttpResponse(template.render(context,request))
+    def post(self,request):
+        p = Patient.objects.get(user__username = request.POST['username'])
+        d = Doctor.objects.get(user = request.user)
+        pres = Prescription(patient = p,Doc=d,symptoms = request.POST['symptoms'],
+                            medicines = request.POST['medicines'],
+                            Dosage = request.POST['dosage'],
+                            Duration = request.POST['duration'])
+        pres.save()
+        return HttpResponseRedirect("../pres/")
+
 
 
 

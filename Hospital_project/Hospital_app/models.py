@@ -37,16 +37,10 @@ class Appointments(models.Model):
     Date_time = models.DateTimeField()
     status = models.CharField(max_length=1500)
 
-class Symptoms(models.Model):
-    symptom = models.CharField(max_length=1500)
-
-class Medicines(models.Model):
-    med = models.CharField(max_length=1500)
-    price = models.IntegerField()
 
 class Prescription(models.Model):
-    symptoms = models.ForeignKey('Symptoms',on_delete=models.CASCADE)
-    medicines = models.ForeignKey('Medicines',on_delete = models.CASCADE)
+    symptoms = models.CharField(max_length=1500)
+    medicines = models.CharField(max_length=1500)
     patient = models.ForeignKey('Patient',on_delete=models.CASCADE)
     Doc = models.ForeignKey('Doctor',on_delete=models.CASCADE)
     Dosage = models.CharField(max_length=1500)
