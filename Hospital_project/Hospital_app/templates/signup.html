@@ -22,15 +22,15 @@ wrong()
 </script>
 {% endif %}
 {% load staticfiles %}
-<link rel = "stylesheet" type="text/css" href = "{% static 'style.css' %}">
+<link rel = "stylesheet" type="text/css" href = "{% static 'register.css' %}">
 
 <div id = "menu">
 <font size = "5">
 <ul>
-<li><a href ="{% url 'Hospital_app:signup' %}"  target = "_parent">Home</a></li>
-<li><a href="{% url 'Hospital_app:signup' %}"  target = "_parent">Register</a></li>
-<li><a href="{% url 'Hospital_app:signup' %}"  target = "_parent">Login</a></li>
-<li><a href="{% url 'Hospital_app:signup' %}"  target = "_parent">Logout</a></li>
+<li><a href ="{% url 'Hospital_app:Home' %}">Home</a></li>
+<li><a href="http://127.0.0.1:8000/?q=0">Register</a></li>
+<li><a href="{% url 'Hospital_app:Login' %}">Login</a></li>
+<li><a href="{% url 'Hospital_app:logout' %}">Logout</a></li>
 
 </ul>
 </div>
@@ -46,8 +46,6 @@ wrong()
 </div>
        	<form  action = "{% url 'Hospital_app:signup' %}"  method = post> {% csrf_token %}
 
-
-       		<h2 style="color:white">Sign up</h2>
        		{{ form.as_p }}
 			<br>
 			<input type="submit" value="sign up"><br><br>

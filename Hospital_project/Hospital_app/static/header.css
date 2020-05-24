@@ -1,0 +1,41 @@
+#menu {
+     height: 70px;
+     width: 100%;
+    background:rgba( 43, 43, 32,0.9);
+    padding:6px 0;
+    border-radius: 20px;
+
+}
+ul {
+    list-style: none;
+    padding:0 45px;
+    margin-left: 0px;
+}
+
+#menu ul li{
+
+   float:left;
+    padding:0 45px;
+    height:30px;
+ border-right:1px solid white;
+
+}
+
+#menu ul li:last-child{
+    border-right:none;
+
+}
+#menu ul li a{
+        text-decoration: none;
+        text-transform: uppercase;
+        font-size:20px;
+        color:#f9faf9;
+    line-height: 30px;
+    transition: font-size 0.4s ease;
+}
+#menu ul li a:hover,#menu ul li a.active
+{
+    font-size: 25px;
+    font-weight:bold;
+    color:#efa61e;
+}

@@ -10,17 +10,18 @@
 	<link href="https://fonts.googleapis.com/css?family=Play&display=swap" rel="stylesheet">-------------->
 </head>
 <body>
-
 {% load staticfiles %}
 <link rel = "stylesheet" type="text/css" href = "{% static 'style.css' %}">
 
 <div id = "menu">
 <font size = "5">
 <ul>
-<li><a href ="{% url 'Hospital_app:Home' %}"  >Home</a></li>
-<li><a href="http://127.0.0.1:8000/?q=0">Register</a></li>
-<li><a href="{% url 'Hospital_app:Login' %}">Login</a></li>
-<li><a href="{% url 'Hospital_app:logout' %}">Logout</a></li>
+<li><a href ="{% url 'Hospital_app:patient_home' %}">home</a></li>
+    <li><a href ="{% url 'Hospital_app:patient_appointment' %}">your appointments</a></li>
+    <li><a href ="{% url 'Hospital_app:Home' %}">invoice and payment</a></li>
+    <li><a href ="{% url 'Hospital_app:Home' %}">medical history</a></li>
+    <li><a href ="{% url 'Hospital_app:Home' %}">profile</a></li>
+<li><a href="{% url 'Hospital_app:logout' %}">logout</a></li>
 
 </ul>
 </div>

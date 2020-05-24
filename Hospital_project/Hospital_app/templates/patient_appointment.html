@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title> Login </title>
+	{% load staticfiles %}
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<!---------------<link rel="stylesheet" type="text/css" href=  "{% static 'newlogin.css' %}">
+	<link href="https://fonts.googleapis.com/css?family=Play&display=swap" rel="stylesheet">-------------->
+</head>
+<body>
+{% load staticfiles %}
+<link rel = "stylesheet" type="text/css" href = "{% static 'header.css' %}">
+
+<div id = "menu">
+<font size = "5">
+<ul>
+<li><a href ="{% url 'Hospital_app:patient_home' %}">home</a></li>
+    <li><a href ="{% url 'Hospital_app:patient_appointment' %}">your appointments</a></li>
+    <li><a href ="{% url 'Hospital_app:Home' %}">invoice and payment</a></li>
+    <li><a href ="{% url 'Hospital_app:Home' %}">medical history</a></li>
+    <li><a href ="{% url 'Hospital_app:Home' %}">profile</a></li>
+<li><a href="{% url 'Hospital_app:logout' %}">logout</a></li>
+
+</ul>
+</div>
+<div style = "margin-top:100px;">
+    <table width="70%" align="center" border = "1">
+        <tr bgcolor="#3498db">
+            <td>Doctor</td>
+            <td>Specialization</td>
+            <td>Date</td>
+
+            <td>Time</td>
+            <td>Status</td>
+        </tr>
+    {% for ap in app %}
+        <tr>
+            <td>{{ ap.doctor.user.username }}</td>
+            <td>{{ap.doctor.specialization}}</td>
+            <td>{{ ap.Date_time.date }}</td>
+            <td>{{ ap.Date_time.time }}</td>
+            <td>{{ ap.status}}</td>
+    {% endfor %}
+    </table>
+</div>

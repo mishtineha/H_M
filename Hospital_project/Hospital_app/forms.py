@@ -3,10 +3,12 @@ from django import forms
 from Hospital_app.models import Doctor,Patient
 from django.contrib.auth.models import User
 
-class Login(ModelForm):
-    class Meta:
-        model = User
-        fields = ['username','password']
+class Login(forms.Form):
+    username = forms.CharField(max_length=1200)
+    password = forms.CharField(max_length=20, widget=forms.PasswordInput)
+    # class Meta:
+    #     model = User
+    #     fields = ['username','password']
 
 class Signin_doctor(forms.Form):
     Name = forms.CharField(max_length=1500)

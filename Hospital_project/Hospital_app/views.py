@@ -1,11 +1,11 @@
 from django.shortcuts import render
 from Hospital_app.forms import Signin_doctor,Signin_patient,Login
 from django.views.generic.base import View,HttpResponseRedirect
-from django.contrib.auth import login,authenticate
+from django.contrib.auth import login,authenticate,logout
 from django.shortcuts import render,render_to_response
 from django.http import HttpResponse
 from django .template import loader
-from Hospital_app.models import Doctor,Patient
+from Hospital_app.models import Doctor,Patient,Appointments
 from django.contrib.auth.models import User
 
 class Signin(View):
@@ -54,7 +54,7 @@ class Signin(View):
                              gender= request.POST['gender'],phone_no = request.POST['phone_no'])
                 pat.save()
 
-            return HttpResponse("login succesfully")
+            return HttpResponseRedirect('../patient/')
         else:
             context = {'form': form, 'is_alert': True}
             template = loader.get_template('signup.html')
@@ -78,7 +78,7 @@ class Login_view(View):
                 user = User.objects.filter(username=str(request.POST['username']),password=str(request.POST['password']))
                 if len(user) == 1:
                     login(request,user[0])
-                    return HttpResponse("Login succesfully")
+                    return HttpResponseRedirect('../patient/')
                 else:
                     context = {'form': form,'is_alert':True}
                     template = loader.get_template('login.html')
@@ -87,6 +87,39 @@ class Login_view(View):
             context = {'form': form,'is_alert':True}
             template = loader.get_template('login.html')
             return HttpResponse("<b>username or password does not match in else</b>" + template.render(context, request))
+
+
+
+class Patient_home(View):
+    def get(self,request):
+        if request.user.is_authenticated:
+
+            context = {"nothing":"nothing"}
+            template = loader.get_template('patient_home.html')
+            return HttpResponse(template.render(context, request))
+        else:
+            return HttpResponse("LOGIN FIRST")
+
+class Logout(View):
+    def get(self,request):
+        if request.user.is_active:
+            logout(request)
+            return HttpResponseRedirect("../home/")
+        else:
+            return HttpResponse("LOGIN FIRST")
+
+class Patient_appointment(View):
+    def get(self,request):
+        if request.user.is_active:
+            p = Patient.objects.filter(user=request.user)
+            appointments = Appointments.objects.filter(patient=p[0])
+            context = {'app':appointments}
+            template = loader.get_template('patient_appointment.html')
+            return HttpResponse(template.render(context,request))
+        else:
+            return HttpResponse("LOGIN FIRST")
+
+
 
 
 
