@@ -1,4 +1,4 @@
-from Hospital_app.views import Signin,Home,Login_view,Patient_home,Logout,Patient_appointment,Patient_invoice
+from Hospital_app.views import Signin,Home,Login_view,Patient_home,Logout,Patient_appointment,Patient_invoice,Profile_patient
 from django.contrib import admin
 from django.urls import path,include
 from django.conf.urls import url
@@ -14,6 +14,7 @@ urlpatterns =[
     path('logout/',Logout.as_view(),name='logout'),
     path('appointment/',Patient_appointment.as_view(),name='patient_appointment'),
     path('invoice/',Patient_invoice.as_view(),name = 'payment'),
-    url(r'getbill/(?P<parameter>[0-9]+)/$',views.Getbill,name = 'getvideo')
+    url(r'getbill/(?P<parameter>[0-9]+)/$',views.Getbill,name = 'getbill'),
+    url(r'profile/',Profile_patient.as_view(),name = "patient_profile")
 
     ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

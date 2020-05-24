@@ -8,10 +8,10 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<!---------------<link rel="stylesheet" type="text/css" href=  "{% static 'newlogin.css' %}">
 	<link href="https://fonts.googleapis.com/css?family=Play&display=swap" rel="stylesheet">-------------->
-</head>
-<body>
+
 {% load staticfiles %}
-<link rel = "stylesheet" type="text/css" href = "{% static 'header.css' %}">
+<link rel = "stylesheet" type="text/css" href = "{% static 'register.css' %}">
+    </head>
 
 <div id = "menu">
 <font size = "5">
@@ -24,23 +24,31 @@
 
 </ul>
 </div>
-<div style = "margin-top:100px;">
-    <table width="70%" align="center" border = "1">
-        <tr bgcolor="#3498db">
-            <td>Doctor</td>
-            <td>Specialization</td>
-            <td>Date</td>
 
-            <td>Time</td>
-            <td>Status</td>
-        </tr>
-    {% for ap in app %}
-        <tr>
-            <td>{{ ap.doctor.user.username }}</td>
-            <td>{{ap.doctor.specialization}}</td>
-            <td>{{ ap.Date_time.date }}</td>
-            <td>{{ ap.Date_time.time }}</td>
-            <td>{{ ap.status}}</td>
-    {% endfor %}
-    </table>
-</div>
+<p>
+<form action = "{% url 'Hospital_app:patient_profile' %}" method = "post">
+{% csrf_token %}
+    <p>
+ Name:<input type = "text" value = {{data.Name}} NAME="Name">
+</p>
+<p>
+    Email:<input type = "text" value = {{data.Email}} name="Email">
+</p>
+<p>
+ Gender:<input type = "text" value = {{data.gender}} name="gender">
+</p>
+<p>
+ Phone_no:<input type = "text" value = {{data.phone_no}} name="phone_no">
+</p>
+{% if is_doc %}
+<p>
+ Degree:<input type = "text" value = {{data.Degree}} name="degree">
+</p>
+<p>
+ specialization:<input type = "text" value = {{data.specialization}} name="specialization">
+</p>
+{% endif %}
+<input type = "submit" value = "Save">
+
+</form>
+</p>

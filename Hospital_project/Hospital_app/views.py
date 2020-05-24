@@ -5,7 +5,7 @@ from django.contrib.auth import login,authenticate,logout
 from django.shortcuts import render,render_to_response
 from django.http import HttpResponse
 from django .template import loader
-from Hospital_app.models import Doctor,Patient,Appointments,Payment
+from Hospital_app.models import Doctor,Patient,Appointments,Payment,Hr,Receptionist
 from django.contrib.auth.models import User
 
 class Signin(View):
@@ -131,10 +131,64 @@ class Patient_invoice(View):
             return HttpResponse("LOGIN FIRST")
 
 def Getbill(request,parameter):
-    pay = Payment.objects.get(id = parameter)
-    context = {"url":pay.invoice}
-    template = loader.get_template("display_bill.html")
-    return HttpResponse(template.render(context,request))
+    if request.user.is_authenticated:
+        pay = Payment.objects.get(id = parameter)
+        context = {"url":pay.invoice}
+        template = loader.get_template("display_bill.html")
+        return HttpResponse(template.render(context,request))
+    else:
+        return HttpResponse("LOGIN FIRST")
+
+class Profile_patient(View):
+    def get(self,request):
+        if request.user.is_authenticated:
+            is_doc=False
+            p = Patient.objects.filter(user = request.user)
+            d = Doctor.objects.filter(user = request.user)
+            h = Hr.objects.filter(user = request.user)
+            r = Receptionist.objects.filter(user = request.user)
+            if len(p) == 1:
+                data = p
+            elif len(d) == 1:
+                is_doc = True
+                data = d
+            elif len(h) == 1:
+                data = h
+            elif len(r) == 1:
+                data = r
+            context = {'data':data[0],'is_doc':is_doc}
+            template = loader.get_template('get_profile.html')
+            return HttpResponse(template.render(context,request))
+        else:
+            return HttpResponse("LOGIN FIRST")
+
+    def post(self,request):
+        is_doc = False
+        p = Patient.objects.filter(user=request.user)
+        d = Doctor.objects.filter(user=request.user)
+        h = Hr.objects.filter(user=request.user)
+        r = Receptionist.objects.filter(user=request.user)
+        if len(p) == 1:
+            data = p
+        elif len(d) == 1:
+            is_doc = True
+            data = d
+        elif len(h) == 1:
+            data = h
+        elif len(r) == 1:
+            data = r
+        data = data[0]
+        data.Name = request.POST['Name']
+        data.Email = request.POST['Email']
+        data.gender = request.POST['gender']
+        data.phone_no = request.POST['phone_no']
+        if is_doc:
+            data.Degree = request.POST['degree']
+            data.specialization = request.POST['specialization']
+        data.save()
+        return HttpResponseRedirect("../profile/")
+
+
 
 
 
