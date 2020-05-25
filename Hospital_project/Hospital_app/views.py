@@ -8,7 +8,9 @@ from django .template import loader
 from Hospital_app.models import Doctor,Patient,Appointments,Payment,Hr,Receptionist,Prescription
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.files import File
 from datetime import datetime
+from Hospital_project.settings import BASE_DIR
 class Signin(View):
     def get(self,request):
         option = request.GET['q']
@@ -156,9 +158,16 @@ class Patient_invoice(View):
 
 def Getbill(request,parameter):
     if request.user.is_authenticated:
+        count = 0
         try:
             request.user.patient
         except ObjectDoesNotExist:
+            count +=1
+        try:
+            request.user.hr
+        except ObjectDoesNotExist:
+            count += 1
+        if count == 2:
             return HttpResponse("LOGIN FIRST")
         pay = Payment.objects.get(id = parameter)
         context = {"url":pay.invoice}
@@ -225,8 +234,8 @@ class Profile_patient(View):
         if form.is_valid:
             data.Name = request.POST['Name']
             data.Email = request.POST['Email']
-            data.gender = request.POST['gender']
-            data.phone_no = request.POST['phone_no']
+            data.gender = request.POST['gender3']
+            data.phone_no = int(request.POST['phone_no'])
             if is_doc:
                 data.Degree = request.POST['degree']
                 data.specialization = request.POST['specialization']
@@ -252,10 +261,22 @@ class Doctor_view(View):
 
 class Hr_view(View):
     def get(self,request):
-        return HttpResponse("hello Hr")
+        if request.user.is_active:
+            try:
+                request.user.hr
+            except ObjectDoesNotExist:
+                return HttpResponse("LOGIN FIRST")
+        context = {'nothing':"nothing"}
+        template = loader.get_template("Hr_home.html")
+        return HttpResponse(template.render(context,request))
 
 class Recep_view(View):
     def get(self,request):
+        if request.user.is_active:
+            try:
+                request.user.receptionist
+            except ObjectDoesNotExist:
+                return HttpResponse("LOGIN FIRST")
         context = {'nothing': "nothing"}
         template = loader.get_template('recep_home.html')
         return HttpResponse(template.render(context, request))
@@ -302,6 +323,11 @@ class prescribe(View):
 
 class Manage(View):
     def get(self,request,data):
+        if request.user.is_active:
+            try:
+                request.user.receptionist
+            except ObjectDoesNotExist:
+                return HttpResponse("LOGIN FIRST")
         if data == "getall":
             template = loader.get_template("manage_appointment.html")
             pat = Patient.objects.all()
@@ -327,6 +353,11 @@ class Manage(View):
 
 class Add(View):
     def post(self,request):
+        if request.user.is_active:
+            try:
+                request.user.receptionist
+            except ObjectDoesNotExist:
+                return HttpResponse("LOGIN FIRST")
         id = None
         try:
             id = request.POST["id"]
@@ -347,13 +378,63 @@ class Add(View):
             a.save()
             return HttpResponseRedirect("../manage/getall/")
         else:
-            a = Appointments(patient = p,doctor = d,Date_time = date_time)
-            a.status = status
+            a = Appointments(patient = p,doctor = d,Date_time = date_time,status = status)
             a.save()
             return HttpResponseRedirect("../manage/getall/")
 
 
+class Payment_view(View):
+    def get(self, request, data):
+        if request.user.is_active:
+            try:
+                request.user.hr
+            except ObjectDoesNotExist:
+                return HttpResponse("LOGIN FIRST")
+        if data == "getall":
+            template = loader.get_template("manage_payment.html")
+            pat = Patient.objects.all()
+            pay = Payment.objects.all()
+            context = {'all_pay': pay, 'pat': pat,'is_update': False}
+            return HttpResponse(template.render(context, request))
+        else:
+            try:
+                id = int(data)
+                all_pay = Payment.objects.all()
+                pay = Payment.objects.get(id=id)
+                template = loader.get_template("manage_payment.html")
+                pat = Patient.objects.all()
+                context = {'all_pay': all_pay, 'pay': pay, 'pat': pat,'is_update': True}
+                return HttpResponse(template.render(context, request))
+            except:
+                return HttpResponse("URL DOES NOT Exist")
 
+class Add_payment(View):
+    def post(self,request):
+        if request.user.is_active:
+            try:
+                request.user.hr
+            except ObjectDoesNotExist:
+                return HttpResponse("LOGIN FIRST")
+        id = None
+        try:
+            id = request.POST["id"]
+        except KeyError:
+            pass
+        p = Patient.objects.get(user__username=request.POST['patient_username'])
+        f = File(open(BASE_DIR + request.POST["invoice"],"rb"))
+        if id:
 
+            a = Payment.objects.get(id = id)
+            a.patient = p
+            a.amount_paid = request.POST["paid"]
+            a.total_amount = request.POST["total"]
+            a.invoice = f
+            a.save()
+            return HttpResponseRedirect("../payment/getall/")
+
+        else:
+            a = Payment(patient = p,amount_paid = request.POST["paid"],total_amount = request.POST["total"],invoice = request.FILES)
+            a.save()
+            return HttpResponseRedirect("../payment/getall/")
 
 

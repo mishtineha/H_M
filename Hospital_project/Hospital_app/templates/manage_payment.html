@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title> Login </title>
+	{% load staticfiles %}
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<!---------------<link rel="stylesheet" type="text/css" href=  "{% static 'newlogin.css' %}">
+	<link href="https://fonts.googleapis.com/css?family=Play&display=swap" rel="stylesheet">-------------->
+
+    <style>
+input[type = submit]
+{
+color:blue;
+width:100px;
+font-size:20px;
+font-family: sans-serif;
+padding: 10px 0;
+    transition: border 0.5s;
+    position:absolute;left:77%;
+}
+#rows:hover
+{
+background-color:grey;
+color:white;
+}
+</style>
+</head>
+<body>
+{% load staticfiles %}
+<link rel = "stylesheet" type="text/css" href = "{% static 'header.css' %}">
+
+<div id = "menu">
+<font size = "5">
+<ul>
+<li><a href ="{% url 'Hospital_app:hr' %}">home</a></li>
+    <li><a href ="../getall/">manage&nbsp;&nbsp;Payments</a></li>
+    <li><a href ="{% url 'Hospital_app:patient_profile' %}">profile</a></li>
+<li><a href="{% url 'Hospital_app:logout' %}">logout</a></li>
+
+</ul>
+</div>
+
+<div style = "margin-top:5%;">
+    <table width="50%" align="left;" border = "1">
+        <tr bgcolor="#3498db" style = "height:50px;">
+            <td>Invoice</td>
+            <td>Amount_paid</td>
+            <td>Total_amount</td>
+        </tr>
+    {% for pay in all_pay %}
+        <tr id = "rows" style = "height:50px;" onclick = "changescreen({{pay.id}})">
+            <td><a href = "http://127.0.0.1:8000/getbill/{{ pay.id}}"> invoice </a></td>
+            <td>{{ pay.amount_paid }}</td>
+            <td>{{ pay.total_amount }}</td>
+    {% endfor %}
+    </table>
+    <br>
+    <br>
+</div>
+<div id = "update_pres" style="position: absolute;left:60%;top:17%;width:550px;">
+    <p style = "background-color:blue;color:white;font-size:30px;">Add Payments</p>
+    <form action = "" name="myForm" ">
+        {% csrf_token %}
+        {% if is_update %}
+        <input type = "hidden" value = "{{ pay.id }}" name="id">
+        Patient:<select style="width:220px;height:30px;font-size:20px;text-align:center;" name ="patient_username">
+        {% for pa in pat %}
+        <option value = "{{ pa.user.username }}">{{ pa.user.username }}</option>
+        {% endfor %}
+    </select>
+        <br><br>
+        Amount-Paid:<input type = "number" step="0.01"  value="{{ pay.amount_paid }}" style="width:220px;height:30px;font-size:20px;" name="paid"><br><br>
+        Total-Amount:<input type = "number" step="0.01"  value="{{ pay.total_amount }}" style="width:220px;height:30px;font-size:20px;" name="total"><br><br>
+        Invoice:<input type = "file" style="width:220px;height:30px;font-size:20px;" name="invoice"><br><br>
+        {% else %}
+        Patient:<select style="width:220px;height:30px;font-size:20px;text-align:center;" name ="patient_username">
+        {% for pa in pat %}
+        <option value = "{{ pa.user.username }}">{{ pa.user.username }}</option>
+        {% endfor %}
+    </select>
+        <br><br>
+       Amount-Paid:<input type = "number" step="0.01"  style="width:220px;height:30px;font-size:20px;" name="paid"><br><br>
+        Total-Amount:<input type = "number" step="0.01"  style="width:220px;height:30px;font-size:20px;" name="total"><br><br>
+        Invoice:<input type = "file" style="width:220px;height:30px;font-size:20px;" name="invoice"><br><br>
+        {% endif %}
+
+
+    </form>
+</div>
+<script type="text/javascript">
+function changescreen(value)
+{
+window.location = "../" + value +"/"
+}
+function validate() {
+
+         if( document.myForm.patient_username.value == "" ) {
+            alert( "Please provide patient_username!" );
+            document.myForm.patient_username.focus() ;
+            return false;
+         }
+         if( document.myForm.paid.value == "" ) {
+            alert( "Please provide amount paid" );
+            document.myForm.date.focus() ;
+            return false;
+         }
+          if( document.myForm.total.value == "" ) {
+            alert( "Please provide total amount!" );
+            document.myForm.time.focus() ;
+            return false;
+
+         }
+         if( document.myForm.invoice.value == "" ) {
+            alert( "Please select invoice file!" );
+            document.myForm.invoice.focus() ;
+            return false;
+
+         }
+         return( true );
+         }
+</script>
+</script>

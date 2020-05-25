@@ -1,5 +1,5 @@
 from Hospital_app.views import Signin,Home,Login_view,Patient_home,Logout,Patient_appointment,Patient_invoice,\
-    Profile_patient,Doctor_view,Hr_view,Recep_view,Doctor_appointment,prescribe,Manage,Add
+    Profile_patient,Doctor_view,Hr_view,Recep_view,Doctor_appointment,prescribe,Manage,Add,Payment_view,Add_payment
 from django.contrib import admin
 from django.urls import path,include
 from django.conf.urls import url
@@ -24,7 +24,9 @@ urlpatterns =[
     url(r'pres/',prescribe.as_view(),name="pres"),
     # url('manage/',Manage.as_view(),name = "manage"),
     path('manage/<slug:data>/',Manage.as_view(),name = "manage"),
+   path('payment/<slug:data>/',Payment_view.as_view(),name = "payment"),
     url('add/',Add.as_view(),name = "Add"),
+    url('create/',Add_payment.as_view(),name = "add_payment"),
 
 
              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -16,7 +16,10 @@
 <div id = "menu">
 <font size = "5">
 <ul>
-
+{% if is_hr %}
+<li><a href ="{% url 'Hospital_app:hr' %}">home</a></li>
+    <li><a href ="../payment/getall/">manage&nbsp;&nbsp;payments</a></li>
+    {% endif %}
     {% if is_recep %}
     <li><a href ="{% url 'Hospital_app:receptionist' %}">home</a></li>
     <li><a href ="../manage/getall/">manage&nbsp;&nbsp;appointments</a></li>
@@ -49,7 +52,7 @@
     Email:<input type = "email" value = {{data.Email}} name="Email">
 </p>
 <p>
- Gender:<input type = "text" value = {{data.gender}} name="gender">
+ Gender:<input type = "text" value = {{data.gender}} name="gender3">
 </p>
 <p>
  Phone_no:<input type = "number" value = {{data.phone_no}} name="phone_no">
@@ -75,21 +78,22 @@
             document.myForm.Name.focus() ;
             return false;
          }
-         if( document.myForm.EMail.value == "" ) {
+         if( document.myForm.Email.value == "" ) {
             alert( "Please provide your Email!" );
-            document.myForm.EMail.focus() ;
+            document.myForm.Email.focus() ;
             return false;
          }
-         if( document.myForm.gender.value == "" ) {
-            alert( "Please provide your gender" );
-            document.myForm.gender.focus() ;
-            return false;
-         }
+
           if( document.myForm.phone_no.value == "" ) {
             alert( "Please provide your phone number!" );
             document.myForm.phone_no.focus() ;
             return false;
 
+         }
+         if( document.myForm.gender3.value == "" ) {
+            alert( "Please provide your gender" );
+            document.myForm.gender3.focus() ;
+            return false;
          }
           if( document.myForm.degree.value == "" ) {
             alert( "Please provide your Degree!" );
@@ -101,6 +105,7 @@
             document.myForm.specialization.focus() ;
             return false;
          }
+
          return( true );
          }
 </script>

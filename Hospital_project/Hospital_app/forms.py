@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 from django import forms
-from Hospital_app.models import Doctor,Patient
+from Hospital_app.models import Doctor,Patient,Payment
 from django.contrib.auth.models import User
 
 class Login(forms.Form):
@@ -29,4 +29,7 @@ class Signin_patient(forms.Form):
     phone_no = forms.IntegerField()
     password = forms.CharField(max_length=20, widget=forms.PasswordInput)
     confirm_password = forms.CharField(max_length=20, widget=forms.PasswordInput)
+
+
+
 
