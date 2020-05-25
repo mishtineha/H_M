@@ -8,6 +8,7 @@ from django .template import loader
 from Hospital_app.models import Doctor,Patient,Appointments,Payment,Hr,Receptionist,Prescription
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+from datetime import datetime
 class Signin(View):
     def get(self,request):
         option = request.GET['q']
@@ -299,7 +300,57 @@ class prescribe(View):
         return HttpResponseRedirect("../pres/")
 
 
+class Manage(View):
+    def get(self,request,data):
+        if data == "getall":
+            template = loader.get_template("manage_appointment.html")
+            pat = Patient.objects.all()
+            doc = Doctor.objects.all()
+            a = Appointments.objects.all()
+            context = {'all_app':a,'pat': pat, 'doc': doc,'is_update':False}
+            return HttpResponse(template.render(context, request))
+        else:
+           try:
+               id = int(data)
+               all_a = Appointments.objects.all()
+               a = Appointments.objects.get(id = id)
+               date = str(a.Date_time.date())
+               time = a.Date_time.strftime("%H")+":"+a.Date_time.strftime("%M")
+               template = loader.get_template("manage_appointment.html")
+               pat = Patient.objects.all()
+               doc = Doctor.objects.all()
+               context = {'all_app': all_a,'app':a,'pat': pat, 'doc': doc, 'is_update': True,'date':date,'time':time,}
+               return HttpResponse(template.render(context, request))
+           except:
+               return HttpResponse("URL DOES NOT Exist")
 
+
+class Add(View):
+    def post(self,request):
+        id = None
+        try:
+            id = request.POST["id"]
+        except KeyError:
+            pass
+        date_time = request.POST['date'] + " " + request.POST['time']
+        date_time = datetime.strptime(date_time, "%Y-%m-%d %H:%M")
+        p = Patient.objects.get(user__username=request.POST['patient_username'])
+        d = Doctor.objects.get(user__username=request.POST['doctor_username'])
+        status = request.POST['status']
+
+        if id:
+            a = Appointments.objects.get(id = id)
+            a.patient = p
+            a.doctor = d
+            a.Date_time = date_time
+            a.status = status
+            a.save()
+            return HttpResponseRedirect("../manage/getall/")
+        else:
+            a = Appointments(patient = p,doctor = d,Date_time = date_time)
+            a.status = status
+            a.save()
+            return HttpResponseRedirect("../manage/getall/")
 
 
 

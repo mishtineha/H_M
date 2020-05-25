@@ -17,22 +17,8 @@
 <font size = "5">
 <ul>
 
-    {% if is_recep %}
     <li><a href ="{% url 'Hospital_app:receptionist' %}">home</a></li>
-    <li><a href ="../manage/getall/">manage&nbsp;&nbsp;appointments</a></li>
-    {% endif %}
-    {% if is_doc %}
-    <li>
-    <a href ="{% url 'Hospital_app:doctor' %}">home</a></li>
-    <li><a href ="{% url 'Hospital_app:app_doctor' %}">appointments</a></li>
-    <li><a href ="{% url 'Hospital_app:pres' %}">prescription</a></li>
-    {% endif %}
-    {% if is_pat %}
-    <li>
-    <a href ="{% url 'Hospital_app:patient_home' %}">home</a></li>
-    <li><a href ="{% url 'Hospital_app:patient_appointment' %}">your appointments</a></li>
-    <li><a href ="{% url 'Hospital_app:payment' %}">invoice and payment</a></li>
-    {% endif %}
+    <li><a href ="../getall/">manage&nbsp;&nbsp;appointments</a></li>
     <li><a href ="{% url 'Hospital_app:patient_profile' %}">profile</a></li>
 <li><a href="{% url 'Hospital_app:logout' %}">logout</a></li>
 
@@ -40,26 +26,26 @@
 </div>
 
 <p>
-<form action = "{% url 'Hospital_app:patient_profile' %}" method = "post" name="myForm" onsubmit = "return(validate());">
+<form action = "../post" method = "post" name="myForm" onsubmit = "return(validate());">
 {% csrf_token %}
     <p>
- Name:<input type = "text" value = {{data.Name}} name="Name">
+ Patient:<input type = "text"  name="patient">
 </p>
 <p>
-    Email:<input type = "email" value = {{data.Email}} name="Email">
+    doctor:<input type = "text"  name="doctor">
 </p>
 <p>
- Gender:<input type = "text" value = {{data.gender}} name="gender">
+ Gender:<input type = "date"  name="date">
 </p>
 <p>
- Phone_no:<input type = "number" value = {{data.phone_no}} name="phone_no">
+ Phone_no:<input type = "number" value = {{all_app.phone_no}} name="phone_no">
 </p>
 {% if is_doc %}
 <p>
- Degree:<input type = "text" value = {{data.Degree}} name="degree">
+ Degree:<input type = "text" value = {{all_app.Degree}} name="degree">
 </p>
 <p>
- specialization:<input type = "text" value = {{data.specialization}} name="specialization">
+ specialization:<input type = "text" value = {{all_app.specialization}} name="specialization">
 </p>
 {% endif %}
 <input type = "submit" value = "Save">

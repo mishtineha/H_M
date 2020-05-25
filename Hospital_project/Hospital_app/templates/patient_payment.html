@@ -26,13 +26,13 @@
 </div>
 <div style = "margin-top:100px;">
     <table width="70%" align="center" border = "1">
-        <tr bgcolor="#3498db">
+        <tr bgcolor="#3498db" style = "height:50px;">
             <td>Invoice</td>
             <td>Amount_paid</td>
             <td>Total_amount</td>
         </tr>
     {% for pay in payment %}
-        <tr>
+        <tr style = "height:50px;">
             <td><a href = "http://127.0.0.1:8000/getbill/{{ pay.id}}"> invoice </a></td>
             <td>{{ pay.amount_paid }}</td>
             <td>{{ pay.total_amount }}</td>

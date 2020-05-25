@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title> Login </title>
+	{% load staticfiles %}
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<!---------------<link rel="stylesheet" type="text/css" href=  "{% static 'newlogin.css' %}">
+	<link href="https://fonts.googleapis.com/css?family=Play&display=swap" rel="stylesheet">-------------->
+
+    <style>
+input[type = submit]
+{
+color:blue;
+width:100px;
+font-size:20px;
+font-family: sans-serif;
+padding: 10px 0;
+    transition: border 0.5s;
+    position:absolute;left:77%;
+}
+#rows:hover
+{
+background-color:grey;
+color:white;
+}
+</style>
+</head>
+<body>
+{% load staticfiles %}
+<link rel = "stylesheet" type="text/css" href = "{% static 'header.css' %}">
+
+<div id = "menu">
+<font size = "5">
+<ul>
+<li><a href ="{% url 'Hospital_app:receptionist' %}">home</a></li>
+    <li><a href ="../getall/">manage&nbsp;&nbsp;appointments</a></li>
+    <li><a href ="{% url 'Hospital_app:patient_profile' %}">profile</a></li>
+<li><a href="{% url 'Hospital_app:logout' %}">logout</a></li>
+
+</ul>
+</div>
+
+<div style = "margin-top:5%;">
+    <table width="50%" align="left;" border = "1">
+        <tr bgcolor="#3498db" style = "height:50px;">
+            <td>Doctor</td>
+            <td>Specialization</td>
+            <td>Patient</td>
+            <td>Date</td>
+
+            <td>Time</td>
+            <td>Status</td>
+        </tr>
+    {% for ap in all_app %}
+        <tr id = "rows" style = "height:50px;" onclick = "changescreen({{ap.id}})">
+            <td>{{ ap.doctor.user.username }}</td>
+            <td>{{ap.doctor.specialization}}</td>
+            <td>{{ ap.patient.user.username }}</td>
+            <td>{{ ap.Date_time.date }}</td>
+            <td>{{ ap.Date_time.time }}</td>
+            <td>{{ ap.status}}</td>
+    {% endfor %}
+    </table>
+    <br>
+    <br>
+</div>
+<div id = "update_pres" style="position: absolute;left:60%;top:17%;width:550px;">
+    <p style = "background-color:blue;color:white;font-size:30px;">Create appointment</p>
+    <form action = "{% url 'Hospital_app:Add' %}" method = "post" name="myForm" onsubmit = "return(validate());">
+        {% csrf_token %}
+        {% if is_update %}
+        <input type = "hidden" value = "{{ app.id }}" name="id">
+        Patient:<select style="width:220px;height:30px;font-size:20px;text-align:center;" name ="patient_username">
+        {% for pa in pat %}
+        <option value = "{{ pa.user.username }}">{{ pa.user.username }}</option>
+        {% endfor %}
+    </select>
+        <br><br>
+        Doctor:<select style="width:220px;height:30px;font-size:20px;text-align:center;" name ="doctor_username">
+        {% for doctor in doc %}
+        <option value = "{{ doctor.user.username }}">{{ doctor.user.username }}</option>
+        {% endfor %}
+    </select>
+
+        <br><br>
+        Status:<select style="width:220px;height:30px;font-size:20px;text-align:center;" name ="status">
+        <option value = "Pending">Pending</option>
+        <option value = "Closed">Closed</option>
+    </select>
+        <br><br>
+        Date:<input type = "date"  value="{{ date }}" style="width:220px;height:30px;font-size:20px;" name="date"><br><br>
+        Time:<input type = "time" value="{{ time }}" style="width:220px;height:30px;font-size:20px;" name="time"><br><br>
+        {% else %}
+        Patient:<select style="width:220px;height:30px;font-size:20px;text-align:center;" name ="patient_username">
+        {% for pa in pat %}
+        <option value = "{{ pa.user.username }}">{{ pa.user.username }}</option>
+        {% endfor %}
+    </select>
+
+        <br><br>
+         Doctor:<select style="width:220px;height:30px;font-size:20px;text-align:center;" name ="doctor_username">
+        {% for doctor in doc %}
+        <option value = "{{ doctor.user.username }}">{{ doctor.user.username }}</option>
+        {% endfor %}
+    </select>
+
+        <br><br>
+        Status:<select style="width:220px;height:30px;font-size:20px;text-align:center;" name ="status">
+        <option value = "Pending">Pending</option>
+        <option value = "Closed">Closed</option>
+    </select>
+        <br><br>
+        Date:<input type = "date" style="width:220px;height:30px;font-size:20px;" name="date"><br><br>
+        Time:<input type = "time" style="width:220px;height:30px;font-size:20px;" name="time"><br><br>
+        {% endif %}
+        <input type = "submit" value = "add">
+
+    </form>
+</div>
+<script type="text/javascript">
+function changescreen(value)
+{
+window.location = "../" + value +"/"
+}
+function validate() {
+
+         if( document.myForm.patient_username.value == "" ) {
+            alert( "Please provide patient_username!" );
+            document.myForm.patient_username.focus() ;
+            return false;
+         }
+         if( document.myForm.doctor_username.value == "" ) {
+            alert( "Please provide doctor_username!" );
+            document.myForm.doctor_username.focus() ;
+            return false;
+         }
+         if( document.myForm.date.value == "" ) {
+            alert( "Please provide date" );
+            document.myForm.date.focus() ;
+            return false;
+         }
+          if( document.myForm.time.value == "" ) {
+            alert( "Please provide time!" );
+            document.myForm.time.focus() ;
+            return false;
+
+         }
+         return( true );
+         }
+</script>
+</script>

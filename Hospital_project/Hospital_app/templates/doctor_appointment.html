@@ -27,7 +27,7 @@
 </div>
 <div style = "margin-top:100px;">
     <table width="70%" align="center" border = "1">
-        <tr bgcolor="#3498db">
+        <tr bgcolor="#3498db" style = "height:50px;">
             <td>Patient</td>
             <td>Date</td>
 
@@ -35,7 +35,7 @@
             <td>Status</td>
         </tr>
     {% for ap in app %}
-        <tr>
+        <tr style = "height:50px;">
             <td>{{ ap.patient.user.username }}</td>
             <td>{{ ap.Date_time.date }}</td>
             <td>{{ ap.Date_time.time }}</td>

@@ -54,8 +54,9 @@ padding: 10px 0;
         Patient:<select style="width:220px;height:30px;font-size:20px;text-align:center;" name ="username">
         {% for pa in pat %}
         <option value = "{{ pa.user.username }}">{{ pa.user.username }}</option>
-    </select>
         {% endfor %}
+    </select>
+
         <br><br>
         Symptoms:<input style="width:220px;height:30px;font-size:20px;" name="symptoms"><br><br>
         Dosage:<input style="width:220px;height:30px;font-size:20px;" name="dosage"><br><br>
