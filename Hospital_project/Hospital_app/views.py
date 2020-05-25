@@ -407,7 +407,7 @@ class Payment_view(View):
                 return HttpResponse(template.render(context, request))
             except:
                 return HttpResponse("URL DOES NOT Exist")
-
+import os
 class Add_payment(View):
     def post(self,request):
         if request.user.is_active:
@@ -421,19 +421,21 @@ class Add_payment(View):
         except KeyError:
             pass
         p = Patient.objects.get(user__username=request.POST['patient_username'])
-        f = File(open(BASE_DIR + request.POST["invoice"],"rb"))
+        f = File(open(os.path.join(BASE_DIR ,request.POST['invoice']),"rb"))
+
         if id:
 
             a = Payment.objects.get(id = id)
             a.patient = p
             a.amount_paid = request.POST["paid"]
             a.total_amount = request.POST["total"]
-            a.invoice = f
+            a.invoice.save("invoice.pdf",content = f,save = True)
             a.save()
             return HttpResponseRedirect("../payment/getall/")
 
         else:
-            a = Payment(patient = p,amount_paid = request.POST["paid"],total_amount = request.POST["total"],invoice = request.FILES)
+            a = Payment(patient = p,amount_paid = request.POST["paid"],total_amount = request.POST["total"])
+            a.invoice.save("invoice.pdf", content=f, save=True)
             a.save()
             return HttpResponseRedirect("../payment/getall/")
 

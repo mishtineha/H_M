@@ -61,7 +61,7 @@ color:white;
 </div>
 <div id = "update_pres" style="position: absolute;left:60%;top:17%;width:550px;">
     <p style = "background-color:blue;color:white;font-size:30px;">Add Payments</p>
-    <form action = "" name="myForm" ">
+    <form action = "{% url 'Hospital_app:add_payment' %}" method = "post" name="myForm" onsubmit="return(validate());">
         {% csrf_token %}
         {% if is_update %}
         <input type = "hidden" value = "{{ pay.id }}" name="id">
@@ -85,7 +85,7 @@ color:white;
         Total-Amount:<input type = "number" step="0.01"  style="width:220px;height:30px;font-size:20px;" name="total"><br><br>
         Invoice:<input type = "file" style="width:220px;height:30px;font-size:20px;" name="invoice"><br><br>
         {% endif %}
-
+<input type  = "submit" value = "Add">
 
     </form>
 </div>
